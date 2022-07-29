@@ -5,6 +5,8 @@ VisualStudioVersion = 17.1.32319.34
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blog.API", "Blog.API\Blog.API.csproj", "{E81F0A38-F8D9-43B5-92FB-1EA28B48923A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cache.API", "Cache.API\Cache.API.csproj", "{6F4857FB-699F-4844-B4D8-612B956B0A3E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{E81F0A38-F8D9-43B5-92FB-1EA28B48923A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E81F0A38-F8D9-43B5-92FB-1EA28B48923A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E81F0A38-F8D9-43B5-92FB-1EA28B48923A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F4857FB-699F-4844-B4D8-612B956B0A3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F4857FB-699F-4844-B4D8-612B956B0A3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F4857FB-699F-4844-B4D8-612B956B0A3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F4857FB-699F-4844-B4D8-612B956B0A3E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
