@@ -5,9 +5,10 @@ namespace Blog.API.Interface
     public interface IPostRepository
     {
         IEnumerable<Post> GetPosts();
-        Post GetPost(int id);
+        Post GetPost(string id);
+        IEnumerable<Post> GetPostsBySubject(string id);
         void CreatePost(Post post);
         bool UpdatePost(Post post);
-        bool DeletePost(int id);
+        bool DeletePost(string id);
     }
 }

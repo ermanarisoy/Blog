@@ -14,19 +14,20 @@ namespace Blog.API.Repository
 
         public void CreateSubject(Subject subject)
         {
-            subject.CreateOn = DateTime.Now;
+            subject.Id = Guid.NewGuid().ToString();
+            subject.CreationDate = DateTime.Now;
             _context.Add(subject);
             _context.SaveChanges();
         }
 
-        public bool DeleteSubject(int id)
+        public bool DeleteSubject(string id)
         {
             var subject = _context.Subject.FirstOrDefault(x => x.Id == id);
             _context.Remove(subject);
             return _context.SaveChanges() > 0;
         }
 
-        public Subject GetSubject(int id)
+        public Subject GetSubject(string id)
         {
             return _context.Subject.FirstOrDefault(x => x.Id == id);
         }

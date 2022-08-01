@@ -21,7 +21,19 @@ namespace Blog.API.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<Post>> GetPost()
         {
-            var posts = _postRepository.GetPosts().ToList();
+            var posts = _postRepository.GetPosts();
+
+            if (posts == null)
+            {
+                return NotFound();
+            }
+            return posts.ToList();
+        }
+
+        [HttpGet("{subjectId}")]
+        public ActionResult<IEnumerable<Post>> GetPosts(string subjectId)
+        {
+            var posts = _postRepository.GetPosts().Where(x => x.SubjectId == subjectId).ToList();
 
             if (posts == null)
             {
@@ -31,26 +43,26 @@ namespace Blog.API.Controllers
         }
 
         // GET: api/Posts/5
-        [HttpGet("{id}")]
-        public ActionResult<Post> GetPost(int id)
-        {
-            if (_postRepository.GetPosts() == null)
-            {
-                return NotFound();
-            }
-            var post = _postRepository.GetPost(id);
+        //[HttpGet("{id}")]
+        //public ActionResult<Post> GetPost(string id)
+        //{
+        //    if (_postRepository.GetPosts() == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    var post = _postRepository.GetPost(id);
 
-            if (post == null)
-            {
-                return NotFound();
-            }
-            return post;
-        }
+        //    if (post == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return post;
+        //}
 
         // PUT: api/Posts/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public IActionResult PutPost(int id, Post post)
+        public IActionResult PutPost(string id, Post post)
         {
             if (id != post.Id)
             {
@@ -97,7 +109,7 @@ namespace Blog.API.Controllers
 
         // DELETE: api/Posts/5
         [HttpDelete("{id}")]
-        public IActionResult DeleteSubject(int id)
+        public IActionResult DeleteSubject(string id)
         {
             if (_postRepository.GetPosts() == null)
             {
@@ -114,7 +126,7 @@ namespace Blog.API.Controllers
             return NoContent();
         }
 
-        private bool SubjectExists(int id)
+        private bool SubjectExists(string id)
         {
             return _postRepository.GetPost(id) != null;
         }

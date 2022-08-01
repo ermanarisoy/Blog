@@ -5,9 +5,9 @@ namespace Blog.API.Interface
     public interface ISubjectRepository
     {
         IEnumerable<Subject> GetSubjects();
-        Subject GetSubject(int id);
+        Subject GetSubject(string id);
         void CreateSubject(Subject subject);
         bool UpdateSubject(Subject subject);
-        bool DeleteSubject(int id);
+        bool DeleteSubject(string id);
     }
 }

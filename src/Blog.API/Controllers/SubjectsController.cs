@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Blog.API.Entities;
 using Blog.API.Interface;
+using AutoMapper;
+using EventBus.Messages.Events;
+using MassTransit;
 
 namespace Blog.API.Controllers
 {
@@ -15,10 +18,13 @@ namespace Blog.API.Controllers
     public class SubjectsController : ControllerBase
     {
         private readonly ISubjectRepository _subjectRepository;
+        private readonly IPublishEndpoint _publishEndpoint;
+        private readonly IMapper _mapper;
 
-        public SubjectsController(ISubjectRepository subjectRepository)
+        public SubjectsController(ISubjectRepository subjectRepository, IMapper mapper)
         {
             _subjectRepository = subjectRepository;
+            _mapper = mapper;
         }
 
         // GET: api/Subjects
@@ -36,7 +42,7 @@ namespace Blog.API.Controllers
 
         // GET: api/Subjects/5
         [HttpGet("{id}")]
-        public ActionResult<Subject> GetSubject(int id)
+        public ActionResult<Subject> GetSubject(string id)
         {
           if (_subjectRepository.GetSubjects() == null)
           {
@@ -54,7 +60,7 @@ namespace Blog.API.Controllers
         // PUT: api/Subjects/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public IActionResult PutSubject(int id, Subject subject)
+        public IActionResult PutSubject(string id, Subject subject)
         {
             if (id != subject.Id)
             {
@@ -89,14 +95,17 @@ namespace Blog.API.Controllers
           {
               return Problem("Entity set 'Subject'  is null.");
           }
-            _subjectRepository.CreateSubject(subject);
+            //_subjectRepository.CreateSubject(subject);
+
+            // send checkout event to rabbitmq
+            var eventMessage = _mapper.Map<SubjectEvent>(subject);
 
             return CreatedAtAction("GetSubject", new { id = subject.Id }, subject);
         }
 
         // DELETE: api/Subjects/5
         [HttpDelete("{id}")]
-        public IActionResult DeleteSubject(int id)
+        public IActionResult DeleteSubject(string id)
         {
             if (_subjectRepository.GetSubjects() == null)
             {
@@ -113,7 +122,7 @@ namespace Blog.API.Controllers
             return NoContent();
         }
 
-        private bool SubjectExists(int id)
+        private bool SubjectExists(string id)
         {
             return _subjectRepository.GetSubject(id) != null;
         }
