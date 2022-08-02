@@ -2,6 +2,12 @@ version: '3.4'
 
 services:
 
+  cachedb:
+    container_name: cachedb
+    restart: always
+    ports:
+      - "6379:6379"
+
   rabbitmq:
     container_name: rabbitmq
     restart: always
@@ -13,8 +19,13 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:443;http://+:80
+      - "CacheSettings:ConnectionString=basketdb:6379"
+      - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
     ports:
       - "7004:80"
+    depends_on:
+      - basketdb
+      - rabbitmq
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro

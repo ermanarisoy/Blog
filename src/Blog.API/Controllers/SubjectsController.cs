@@ -21,10 +21,11 @@ namespace Blog.API.Controllers
         private readonly IPublishEndpoint _publishEndpoint;
         private readonly IMapper _mapper;
 
-        public SubjectsController(ISubjectRepository subjectRepository, IMapper mapper)
+        public SubjectsController(ISubjectRepository subjectRepository, IMapper mapper, IPublishEndpoint publishEndpoint)
         {
             _subjectRepository = subjectRepository;
             _mapper = mapper;
+            _publishEndpoint = publishEndpoint;
         }
 
         // GET: api/Subjects
@@ -97,8 +98,13 @@ namespace Blog.API.Controllers
           }
             //_subjectRepository.CreateSubject(subject);
 
+            subject.Id = Guid.NewGuid().ToString();
+            subject.CreationDate = DateTime.Now;
+            _subjectRepository.CreateSubject(subject);
+
             // send checkout event to rabbitmq
             var eventMessage = _mapper.Map<SubjectEvent>(subject);
+            _publishEndpoint.Publish<SubjectEvent>(eventMessage);
 
             return CreatedAtAction("GetSubject", new { id = subject.Id }, subject);
         }

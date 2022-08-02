@@ -30,7 +30,7 @@ namespace Cache.API.Controllers
 
         // GET: api/Subjects/5
         [HttpGet("{id}")]
-        public ActionResult<Subject> GetSubject(int id)
+        public ActionResult<Subject> GetSubject(string id)
         {
             if (_subjectRepository.GetSubjects() == null)
             {
@@ -48,7 +48,7 @@ namespace Cache.API.Controllers
         // PUT: api/Subjects/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public IActionResult PutSubject(int id, Subject subject)
+        public IActionResult PutSubject(string id, Subject subject)
         {
             if (id != subject.Id)
             {
@@ -90,7 +90,7 @@ namespace Cache.API.Controllers
 
         // DELETE: api/Subjects/5
         [HttpDelete("{id}")]
-        public IActionResult DeleteSubject(int id)
+        public IActionResult DeleteSubject(string id)
         {
             if (_subjectRepository.GetSubjects() == null)
             {
@@ -107,7 +107,7 @@ namespace Cache.API.Controllers
             return NoContent();
         }
 
-        private bool SubjectExists(int id)
+        private bool SubjectExists(string id)
         {
             return _subjectRepository.GetSubject(id) != null;
         }

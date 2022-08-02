@@ -31,7 +31,7 @@ namespace Cache.API.Controllers
 
         // GET: api/Posts/5
         [HttpGet("{id}")]
-        public ActionResult<Post> GetPost(int id)
+        public ActionResult<Post> GetPost(string id)
         {
             if (_postRepository.GetPosts() == null)
             {
@@ -49,7 +49,7 @@ namespace Cache.API.Controllers
         // PUT: api/Posts/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public IActionResult PutPost(int id, Post post)
+        public IActionResult PutPost(string id, Post post)
         {
             if (id != post.Id)
             {
@@ -96,7 +96,7 @@ namespace Cache.API.Controllers
 
         // DELETE: api/Posts/5
         [HttpDelete("{id}")]
-        public IActionResult DeleteSubject(int id)
+        public IActionResult DeleteSubject(string id)
         {
             if (_postRepository.GetPosts() == null)
             {
@@ -113,7 +113,7 @@ namespace Cache.API.Controllers
             return NoContent();
         }
 
-        private bool SubjectExists(int id)
+        private bool SubjectExists(string id)
         {
             return _postRepository.GetPost(id) != null;
         }

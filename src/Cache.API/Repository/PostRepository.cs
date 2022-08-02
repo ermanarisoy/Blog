@@ -16,17 +16,17 @@ namespace Cache.API.Repository
 
         public void CreatePost(Post post)
         {
-            _redisCache.SetString(post.Id.ToString(), JsonConvert.SerializeObject(post));
+            _redisCache.SetString(post.Id, JsonConvert.SerializeObject(post));
         }
 
-        public void DeletePost(int id)
+        public void DeletePost(string id)
         {
-            _redisCache.Remove(id.ToString());
+            _redisCache.Remove(id);
         }
 
-        public Post GetPost(int id)
+        public Post GetPost(string id)
         {
-            var post = _redisCache.GetString(id.ToString());
+            var post = _redisCache.GetString(id);
 
             if (String.IsNullOrEmpty(post))
                 return null;
@@ -41,7 +41,7 @@ namespace Cache.API.Repository
 
         public Post UpdatePost(Post post)
         {
-            _redisCache.SetString(post.Id.ToString(), JsonConvert.SerializeObject(post));
+            _redisCache.SetString(post.Id, JsonConvert.SerializeObject(post));
 
             return GetPost(post.Id);
         }

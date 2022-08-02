@@ -14,8 +14,6 @@ namespace Blog.API.Repository
 
         public void CreateSubject(Subject subject)
         {
-            subject.Id = Guid.NewGuid().ToString();
-            subject.CreationDate = DateTime.Now;
             _context.Add(subject);
             _context.SaveChanges();
         }

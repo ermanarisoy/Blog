@@ -5,9 +5,9 @@ namespace Cache.API.Interface
     public interface IPostRepository
     {
         IEnumerable<Post> GetPosts();
-        Post GetPost(int id);
+        Post GetPost(string id);
         void CreatePost(Post post);
         Post UpdatePost(Post post);
-        void DeletePost(int id);
+        void DeletePost(string id);
     }
 }

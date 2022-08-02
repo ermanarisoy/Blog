@@ -16,17 +16,17 @@ namespace Cache.API.Repository
 
         public void CreateSubject(Subject subject)
         {
-            _redisCache.SetString(subject.Id.ToString(), JsonConvert.SerializeObject(subject));
+            _redisCache.SetString(subject.Id, JsonConvert.SerializeObject(subject));
         }
 
-        public void DeleteSubject(int id)
+        public void DeleteSubject(string id)
         {
-            _redisCache.Remove(id.ToString());
+            _redisCache.Remove(id);
         }
 
-        public Subject GetSubject(int id)
+        public Subject GetSubject(string id)
         {
-            var subject = _redisCache.GetString(id.ToString());
+            var subject = _redisCache.GetString(id);
 
             if (String.IsNullOrEmpty(subject))
                 return null;
@@ -41,7 +41,7 @@ namespace Cache.API.Repository
 
         public Subject UpdateSubject(Subject subject)
         {
-            _redisCache.SetString(subject.Id.ToString(), JsonConvert.SerializeObject(subject));
+            _redisCache.SetString(subject.Id, JsonConvert.SerializeObject(subject));
 
             return GetSubject(subject.Id);
         }
