@@ -38,10 +38,10 @@ namespace Blog.API.Controllers
             return posts.ToList();
         }
 
-        [HttpGet("{subjectId}")]
-        public ActionResult<IEnumerable<Post>> GetPosts(string subjectId)
+        [HttpGet("{id}")]
+        public ActionResult<IEnumerable<Post>> GetPosts(string id)
         {
-            var posts = _postRepository.GetPosts().Where(x => x.SubjectId == subjectId).ToList();
+            var posts = _postRepository.GetPosts().Where(x => x.SubjectId == id).ToList();
 
             if (posts == null)
             {

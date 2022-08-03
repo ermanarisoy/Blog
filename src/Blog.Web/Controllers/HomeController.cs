@@ -9,11 +9,13 @@ namespace Blog.Web.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ISubjectRepository _subjectRepository;
+        private readonly IPostRepository _postRepository;
 
-        public HomeController(ILogger<HomeController> logger, ISubjectRepository subjectRepository)
+        public HomeController(ILogger<HomeController> logger, ISubjectRepository subjectRepository, IPostRepository postRepository)
         {
             _logger = logger;
             _subjectRepository = subjectRepository;
+            _postRepository = postRepository;
         }
         //public async Task<IActionResult> IndexAsync()
         //{
@@ -63,6 +65,36 @@ namespace Blog.Web.Controllers
 
             int pageSize = 3;
             return View(await PaginatedList<Subject>.CreateAsync(subjects, pageNumber ?? 1, pageSize));
+        }
+
+        public IActionResult Subject()
+        {
+            return View();
+        }
+
+        public IActionResult CreateSubject(Subject subject)
+        {
+            var res = _subjectRepository.CreateSubject(subject).Result;
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult Post(string id)
+        {
+            ViewBag.Id = id;
+            return View();
+        }
+
+        public IActionResult CreatePost(Post post)
+        {
+            var res = _postRepository.CreatePost(post).Result;
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult Posts(string id)
+        {
+            ViewBag.Id = id;
+            var posts = _postRepository.GetPost(id).Result;
+            return View(posts);
         }
 
         public IActionResult Privacy()

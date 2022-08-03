@@ -15,9 +15,12 @@ builder.Services.AddTransient<LoggingDelegatingHandler>();
 builder.Services.AddHttpClient<ISubjectRepository, SubjectRepository>(c =>
                 c.BaseAddress = new Uri(builder.Configuration["ApiSettings:GatewayAddress"]))
                 .AddHttpMessageHandler<LoggingDelegatingHandler>();
-                //.AddPolicyHandler(GetRetryPolicy())
-                //.AddPolicyHandler(GetCircuitBreakerPolicy());
+//.AddPolicyHandler(GetRetryPolicy())
+//.AddPolicyHandler(GetCircuitBreakerPolicy());
 
+builder.Services.AddHttpClient<IPostRepository, PostRepository>(c =>
+                c.BaseAddress = new Uri(builder.Configuration["ApiSettings:GatewayAddress"]))
+                .AddHttpMessageHandler<LoggingDelegatingHandler>();
 builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
 {
     GetRetryPolicy();

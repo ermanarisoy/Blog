@@ -15,6 +15,7 @@ namespace Blog.Web.Repository
 
         public async Task<Subject> CreateSubject(Subject model)
         {
+            model.Id = "";
             var response = await _client.PostAsJson($"/api/Subjects", model);
             if (response.IsSuccessStatusCode)
                 return await response.ReadContentAs<Subject>();
