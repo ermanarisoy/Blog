@@ -14,8 +14,6 @@ namespace Blog.API.Repository
 
         public void CreatePost(Post post)
         {
-            post.Id = Guid.NewGuid().ToString();
-            post.CreationDate = DateTime.Now;
             _context.Add(post);
             _context.SaveChanges();
         }

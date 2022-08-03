@@ -32,10 +32,6 @@ namespace Cache.API.Controllers
         [HttpGet("{id}")]
         public ActionResult<Subject> GetSubject(string id)
         {
-            if (_subjectRepository.GetSubjects() == null)
-            {
-                return NotFound();
-            }
             var subject = _subjectRepository.GetSubject(id);
 
             if (subject == null)
@@ -79,10 +75,6 @@ namespace Cache.API.Controllers
         [HttpPost]
         public ActionResult<Subject> PostSubject(Subject subject)
         {
-            if (subject == null)
-            {
-                return Problem("Entity set 'Subject'  is null.");
-            }
             _subjectRepository.CreateSubject(subject);
 
             return CreatedAtAction("GetSubject", new { id = subject.Id }, subject);

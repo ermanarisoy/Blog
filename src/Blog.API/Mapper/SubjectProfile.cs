@@ -8,7 +8,8 @@ namespace Blog.API.Mapper
     {
         public SubjectProfile()
         {
-            CreateMap<Subject, SubjectEvent>().ReverseMap();
+            CreateMap<Subject, SubjectEvent>().ForMember(x => x.PostEvents, cfg => cfg.MapFrom(y => y.Posts)).ReverseMap();
+            CreateMap<Post, PostEvent>().ReverseMap();
         }
     }
 }

@@ -1,5 +1,8 @@
-﻿using Blog.API.Entities;
+﻿using AutoMapper;
+using Blog.API.Entities;
 using Blog.API.Interface;
+using EventBus.Messages.Events;
+using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,10 +14,15 @@ namespace Blog.API.Controllers
     {
         private readonly IPostRepository _postRepository;
         private readonly ISubjectRepository _subjectRepository;
+        private readonly IPublishEndpoint _publishEndpoint;
+        private readonly IMapper _mapper;
 
-        public PostsController(IPostRepository postRepository)
+        public PostsController(IPostRepository postRepository, ISubjectRepository subjectRepository, IMapper mapper, IPublishEndpoint publishEndpoint)
         {
             _postRepository = postRepository;
+            _subjectRepository = subjectRepository;
+            _mapper = mapper;
+            _publishEndpoint = publishEndpoint;
         }
 
         // GET: api/Posts
@@ -75,7 +83,7 @@ namespace Blog.API.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!SubjectExists(id))
+                if (!PostExists(id))
                 {
                     return NotFound();
                 }
@@ -91,7 +99,7 @@ namespace Blog.API.Controllers
         // POST: api/Posts
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public ActionResult<Post> PostSubject(Post post)
+        public ActionResult<Post> PostPost(Post post)
         {
             if (post == null)
             {
@@ -102,14 +110,23 @@ namespace Blog.API.Controllers
             {
                 return Problem("Entity set 'Subject'  is null.");
             }
+            post.Id = Guid.NewGuid().ToString();
+            post.CreationDate = DateTime.Now;
             _postRepository.CreatePost(post);
+            subject = _subjectRepository.GetSubject(post.SubjectId);
+            var postList = _postRepository.GetPostsBySubject(post.SubjectId);
+            subject.Posts = new List<Post>();
+            subject.Posts.AddRange(postList);
+            // send checkout event to rabbitmq
+            var eventMessage = _mapper.Map<SubjectEvent>(subject);
+            _publishEndpoint.Publish<SubjectEvent>(eventMessage);
 
             return CreatedAtAction("GetPost", new { id = post.Id }, post);
         }
 
         // DELETE: api/Posts/5
         [HttpDelete("{id}")]
-        public IActionResult DeleteSubject(string id)
+        public IActionResult DeletePost(string id)
         {
             if (_postRepository.GetPosts() == null)
             {
@@ -126,7 +143,7 @@ namespace Blog.API.Controllers
             return NoContent();
         }
 
-        private bool SubjectExists(string id)
+        private bool PostExists(string id)
         {
             return _postRepository.GetPost(id) != null;
         }
