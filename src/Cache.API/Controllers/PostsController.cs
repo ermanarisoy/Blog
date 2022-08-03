@@ -33,10 +33,6 @@ namespace Cache.API.Controllers
         [HttpGet("{id}")]
         public ActionResult<Post> GetPost(string id)
         {
-            if (_postRepository.GetPosts() == null)
-            {
-                return NotFound();
-            }
             var post = _postRepository.GetPost(id);
 
             if (post == null)
