@@ -13,3 +13,16 @@ services:
     build:
       context: .
       dockerfile: Blog.API/Dockerfile
+
+  cache.api:
+    image: ${DOCKER_REGISTRY-}cacheapi
+    build:
+      context: .
+      dockerfile: Cache.API/Dockerfile
+
+  blog.web:
+    image: ${DOCKER_REGISTRY-}blogweb
+    build:
+      context: .
+      dockerfile: Blog.Web/Dockerfile
+
