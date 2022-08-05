@@ -8,6 +8,15 @@ services:
     ports:
       - "6379:6379"
 
+  blogdb:
+    container_name: blogdb
+    environment:
+        SA_PASSWORD: "SwN12345678"
+        ACCEPT_EULA: "Y"
+    restart: always
+    ports:
+        - "1433:1433"
+
   rabbitmq:
     container_name: rabbitmq
     restart: always
@@ -20,9 +29,11 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:443;http://+:80
       - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
+      - "ConnectionStrings:OrderingConnectionString=Server=localhost;Database=BlogDB;Trusted_Connection=True;MultipleActiveResultSets=true"  
     ports:
       - "7010:80"
     depends_on:
+      - blogdb
       - rabbitmq
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
