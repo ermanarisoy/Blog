@@ -9,7 +9,7 @@ builder.Services.AddScoped<ISubjectRepository, SubjectRepository>();
 builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddDbContext<BlogAPIContext>(options =>
-    options.UseInMemoryDatabase(builder.Configuration.GetConnectionString("BlogAPIContext") ?? throw new InvalidOperationException("Connection string 'BlogAPIContext' not found.")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("BlogAPIContext") ?? throw new InvalidOperationException("Connection string 'BlogAPIContext' not found.")));
 
 builder.Services.AddMassTransit(config =>
 {
@@ -52,6 +52,12 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+}
+
+using (var scope = app.Services.CreateScope())
+{
+    var dataContext = scope.ServiceProvider.GetRequiredService<BlogAPIContext>();
+    dataContext.Database.Migrate();
 }
 
 app.UseHttpsRedirection();

@@ -10,7 +10,7 @@ builder.Services.AddScoped<IPostRepository, PostRepository>();
 // Add services to the container.
 builder.Services.AddStackExchangeRedisCache(options =>
 {
-    options.Configuration = "localhost:6379";
+    options.Configuration = builder.Configuration["CacheSettings:ConnectionString"];
 });
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
