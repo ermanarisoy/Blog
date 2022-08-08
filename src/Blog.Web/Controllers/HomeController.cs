@@ -44,22 +44,23 @@ namespace Blog.Web.Controllers
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                subjects = subjects.Where(s => s.LastName.Contains(searchString)
-                                       || s.FirstName.Contains(searchString) || s.Content.Contains(searchString) || s.Title.Contains(searchString));
+                subjects = subjects.Where(s => s.LastName.ToLower().Contains(searchString.ToLower())
+                                       || s.FirstName.ToLower().Contains(searchString.ToLower()) || s.Content.ToLower().Contains(searchString.ToLower()) || s.Title.ToLower().Contains(searchString.ToLower()));
             }
+
             switch (sortOrder)
             {
                 case "name_desc":
                     subjects = subjects.OrderByDescending(s => s.LastName);
                     break;
-                case "Date":
-                    subjects = subjects.OrderBy(s => s.CreationDate);
+                case "conten_desc":
+                    subjects = subjects.OrderBy(s => s.Content);
                     break;
                 case "date_desc":
                     subjects = subjects.OrderByDescending(s => s.CreationDate);
                     break;
                 default:
-                    subjects = subjects.OrderBy(s => s.CreationDate);
+                    subjects = subjects.OrderByDescending(s => s.CreationDate);
                     break;
             }
 
